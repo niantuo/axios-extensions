@@ -21,7 +21,7 @@ export type Options = {
 
 export default function throttleAdapterEnhancer(adapter: AxiosAdapter, options: Options = {}): AxiosAdapter {
 
-	const { threshold = 1000, cache = new LRUCache<string, RecordedCache>({ max: 10 }) } = options;
+	const { cache = new LRUCache<string, RecordedCache>({ max: 10 }) } = options;
 
 	const recordCacheWithRequest = (index: string, config: AxiosRequestConfig) => {
 
@@ -53,8 +53,7 @@ export default function throttleAdapterEnhancer(adapter: AxiosAdapter, options: 
 	};
 
 	return config => {
-
-		const { url, method, params, paramsSerializer } = config;
+		const { url, method, params, paramsSerializer, threshold = 1000 } = config;
 		const index = buildSortedURL(url, params, paramsSerializer);
 
 		const now = Date.now();
